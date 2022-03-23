@@ -837,8 +837,6 @@ class INFORMES_AIDC(Frame):
                 elif seleccion=='Fact':
                     df_export , df_export2 , df_export3= fact.tabla_AIDC(df)
                     func.guardar_reporte(df_export , df_export2 , df_export3 , 3)
-                #edfdnvnefvdscvfredscfveds
-                #sdvdfvfeds
 
 root = APP()
 root.mainloop()
