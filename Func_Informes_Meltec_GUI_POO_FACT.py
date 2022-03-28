@@ -76,6 +76,7 @@ def agregar_filtros( df , df_metas , Q_number , mes_Actual , actual_Q):
     '''FILTRO COMERCIALES SUCURSALES'''
     #Filtro mes actual
     mes_Act= mes_Act[mes_Act['Categoría de producto'].str.contains("MOTOROLA|VERTEX")]
+    mes_Act= mes_Act[~mes_Act['Categoría de producto'].str.contains('VARIOS SOLUCIONES MOTOROLA')]
     df_auxiliar= pd.pivot_table(mes_Act, index=["Empleado responsable"], values=["Valor neto facturado"], aggfunc=['sum'])
     for i in range(len(df_auxiliar)):
         for j in range(len(df_tabla)):
@@ -88,6 +89,7 @@ def agregar_filtros( df , df_metas , Q_number , mes_Actual , actual_Q):
     
     #Filtro Q en curso
     Q_actual = Q_actual[Q_actual['Categoría de producto'].str.contains("MOTOROLA|VERTEX")]
+    Q_actual= Q_actual[~Q_actual['Categoría de producto'].str.contains('VARIOS SOLUCIONES MOTOROLA')]
     df_auxiliar= pd.pivot_table(Q_actual, index=["Empleado responsable"], values=["Valor neto facturado"], aggfunc=['sum'])
     
     for i in range(len(df_auxiliar)):
@@ -101,6 +103,7 @@ def agregar_filtros( df , df_metas , Q_number , mes_Actual , actual_Q):
 
     #Filtro Acumulado AÑO
     df_filt= df_filt[df_filt['Categoría de producto'].str.contains("MOTOROLA|VERTEX")]
+    df_filt= df_filt[~df_filt['Categoría de producto'].str.contains('VARIOS SOLUCIONES MOTOROLA')]
     df_filt= pd.pivot_table(df_filt, index=["Empleado responsable"], values=["Valor neto facturado"], aggfunc=['sum'])
     for i in range(len(df_filt)):
         for j in range(len(df_tabla)):
@@ -160,6 +163,7 @@ def agregar_Porcentajes(df_tabla, Q_number, fin_titulo):
 def Ventas_Motorola_Vertex(data , df_metas):
     #FILTROS DEL INFORME
     data= data[data['Categoría de producto'].str.contains("MOTOROLA|VERTEX")]
+    data= data[~data['Categoría de producto'].str.contains('VARIOS SOLUCIONES MOTOROLA')]
     data= pd.pivot_table(data, index=["Empleado responsable"], values=["Valor neto facturado"], aggfunc=['sum'])
 
     df_tabla2= pd.DataFrame(columns=['ASESOR','VENTA AÑO 2022 MOTOROLA', 'META MOTOROLA ANUAL' , 'PORCENTAJE CUMPLIDO'])
