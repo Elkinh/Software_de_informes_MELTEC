@@ -570,6 +570,7 @@ class Informe_Facturacion(Frame):
                 #El testigo se deja para proximas funcionalidades y diversificaciones de la idea
                 df=pd.read_excel(filename , header=1)
                 df= df[df['Factura (Año natural)']== int(ano)]
+                df= df[~df['Categoría de producto'].str.contains('VARIOS SOLUCIONES MOTOROLA')]
                 df_metas=fact.cargar_metas_y_comerciales_motorola()
                 number_Q= fact.seleccion_Q_actual(mes , Qs)
                 df_exportar  , fin_titulo = fact.agregar_filtros(df, df_metas , number_Q , mes , Qs[int(number_Q)])
