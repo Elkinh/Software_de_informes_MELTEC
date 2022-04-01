@@ -75,7 +75,7 @@ def agregar_filtros( df , df_metas , Q_number , mes_Actual , actual_Q):
     
     '''FILTRO COMERCIALES SUCURSALES'''
     #Filtro mes actual
-    mes_Act= mes_Act[mes_Act['Categoría de producto'].str.contains("MOTOROLA|VERTEX")]
+    mes_Act= mes_Act[mes_Act['Categoría de producto'].str.contains("MOTOROLA|VERTEX|PAQUETE BASICO TRBONET")]
     mes_Act= mes_Act[~mes_Act['Categoría de producto'].str.contains('VARIOS SOLUCIONES MOTOROLA')]
     df_auxiliar= pd.pivot_table(mes_Act, index=["Empleado responsable"], values=["Valor neto facturado"], aggfunc=['sum'])
     for i in range(len(df_auxiliar)):
@@ -88,7 +88,7 @@ def agregar_filtros( df , df_metas , Q_number , mes_Actual , actual_Q):
                 df_tabla['VALOR VENTA ' + fin_titulo].iloc[j] = df_auxiliar.iloc[i,0]
     
     #Filtro Q en curso
-    Q_actual = Q_actual[Q_actual['Categoría de producto'].str.contains("MOTOROLA|VERTEX")]
+    Q_actual = Q_actual[Q_actual['Categoría de producto'].str.contains("MOTOROLA|VERTEX|PAQUETE BASICO TRBONET")]
     Q_actual= Q_actual[~Q_actual['Categoría de producto'].str.contains('VARIOS SOLUCIONES MOTOROLA')]
     df_auxiliar= pd.pivot_table(Q_actual, index=["Empleado responsable"], values=["Valor neto facturado"], aggfunc=['sum'])
     
@@ -102,7 +102,7 @@ def agregar_filtros( df , df_metas , Q_number , mes_Actual , actual_Q):
                 df_tabla['VENTA Q' + Q_number +' AÑO 2022'].iloc[j] = df_auxiliar.iloc[i,0]
 
     #Filtro Acumulado AÑO
-    df_filt= df_filt[df_filt['Categoría de producto'].str.contains("MOTOROLA|VERTEX")]
+    df_filt= df_filt[df_filt['Categoría de producto'].str.contains("MOTOROLA|VERTEX|PAQUETE BASICO TRBONET")]
     df_filt= df_filt[~df_filt['Categoría de producto'].str.contains('VARIOS SOLUCIONES MOTOROLA')]
     df_filt= pd.pivot_table(df_filt, index=["Empleado responsable"], values=["Valor neto facturado"], aggfunc=['sum'])
     for i in range(len(df_filt)):
@@ -162,7 +162,7 @@ def agregar_Porcentajes(df_tabla, Q_number, fin_titulo):
 
 def Ventas_Motorola_Vertex(data , df_metas):
     #FILTROS DEL INFORME
-    data= data[data['Categoría de producto'].str.contains("MOTOROLA|VERTEX")]
+    data= data[data['Categoría de producto'].str.contains("MOTOROLA|VERTEX|PAQUETE BASICO TRBONET")]
     data= data[~data['Categoría de producto'].str.contains('VARIOS SOLUCIONES MOTOROLA')]
     data= pd.pivot_table(data, index=["Empleado responsable"], values=["Valor neto facturado"], aggfunc=['sum'])
 
