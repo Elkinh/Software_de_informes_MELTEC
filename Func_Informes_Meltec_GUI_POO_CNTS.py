@@ -161,10 +161,49 @@ def Filtro_AyE(df):
     '''
 
     df= df[df['Categoría de producto'].str.contains("MOTOROLA|VERTEX")]
-    df= df[~df['Categoría de producto'].isin(['BATERIAS IMPRES MOTOROLA','BATERIAS NORMALES MOTOROLA','BATERIAS VERTEX','RADIOS MOVILES MOTOROLA','RADIOS PORTATILES MOTOROLA','RADIOS MOVILES VERTEX','RADIOS PORTATILES VERTEX','REPETIDORAS MOTOROLA','FACTURACIÓN PROYECTOS MOTOROLA','SERVICIO DE ALQUILER MOTOROLA'])]
+    df= df[~df['Categoría de producto'].isin(['BATERIAS IMPRES MOTOROLA','BATERIAS NORMALES MOTOROLA','BATERIAS VERTEX','RADIOS MOVILES MOTOROLA','RADIOS PORTATILES MOTOROLA','RADIOS MOVILES VERTEX','RADIOS PORTATILES VERTEX','REPETIDORAS MOTOROLA','FACTURACIÓN PROYECTOS MOTOROLA','SERVICIO DE ALQUILER MOTOROLA','LICENCIAS-SOFTWARE-MANUALES MOTOROLA','VARIOS SOLUCIONES MOTOROLA'])]
     return df
+
+
+def AbreviacionMes(mes,ano):
+    mesENCURSO= mes[0:3].lower()
+    anoENCURSO= ano[2:]
+    mesAB= mesENCURSO + '-' + anoENCURSO
+    return mesAB
     
+
+def GenerarReporteSIMS(radios,baterias, AyE, mes ,ano):
+    TodaLaInfo= pd.DataFrame()
+    TodaLaInfo= radios.copy()
+    TodaLaInfo = pd.concat([TodaLaInfo, baterias , AyE])
+    #SE GENERA LA TABLA FINAL
+    TablaSIMS= pd.DataFrame(columns=['DISTRIBUTOR ERP NUMBER','DISTRIBUTOR NAME','MONTH OF ACTIVITY','DISTRIBUTOR INVOICE NUMBER','DISTRIBUTOR INVOICE DATE','RESELLER  ERP NUMBER','RESELLER TRADING NAME*','RESELLER COMPANY NAME','RESELLER COUNTRY','RESELLER STATE','Part NUMBER (SKU)','Model NUMBER','QUANTITY','SERIAL NUMBER*','Sales Price*','PE or Promotion number (if applicable)*','End Customer Name','End Customer Industry Vertical'])
+    #VALORES DINAMICOS
+    TablaSIMS['DISTRIBUTOR INVOICE DATE']= TodaLaInfo['Factura (Fecha de factura)'].copy()
+    TablaSIMS['RESELLER TRADING NAME*'] = TodaLaInfo['Factura (Cliente)'].copy()
+    TablaSIMS['Part NUMBER (SKU)']= TodaLaInfo['Producto'].copy()
+    TablaSIMS['Model NUMBER']= TodaLaInfo['Producto (Texto)'].copy()
+    TablaSIMS['QUANTITY']= TodaLaInfo['Cantidad de factura'].copy()
+    TablaSIMS['Sales Price*']=TodaLaInfo['Valor neto facturado'].copy()
+    TablaSIMS['PE or Promotion number (if applicable)*']=TodaLaInfo['Pedido de cliente (Promoción)']
+
+    #VALORES ESTATICOS
+    TablaSIMS['MONTH OF ACTIVITY']= AbreviacionMes(mes,ano)
+    TablaSIMS['RESELLER COUNTRY']='Colombia'
+    TablaSIMS['DISTRIBUTOR ERP NUMBER']='168442'
+    TablaSIMS['DISTRIBUTOR NAME']='Meltec'
     
+    #Reemplaza los valores de NaN por 0 o UNKNOWN
+    TablaSIMS['QUANTITY'] = TablaSIMS['QUANTITY'].fillna(0)
+    TablaSIMS['Sales Price*'] = TablaSIMS['Sales Price*'].fillna(0)
+    TablaSIMS['PE or Promotion number (if applicable)*'] = TablaSIMS['PE or Promotion number (if applicable)*'].replace('#','UNKNOWN')
+    
+    return TablaSIMS
+    
+
+
+
+
 def cambiar_descripciones():
     #BASE DE DATOS REFERENCIAS DE RADIOS
     dB= pd.read_excel('./DatabaseReferencias.xlsx' , sheet_name= "Database" , header = 0)

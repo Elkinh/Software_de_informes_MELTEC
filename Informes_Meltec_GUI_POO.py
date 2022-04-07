@@ -718,34 +718,40 @@ class Informe_SIMS(Frame):
                 self.pasar=1
                 #Testigo=1 Indica que corresponde a Motorola
                 df_filt= func.limpieza_datos(filename , ano)
+                
                 df_filt= func.agregar_fecha(df_filt , mes , "acumulado" ,0,0)
+                
+                #Cambiar Formato de Fecha (IMPORTANTE PARA REESTRUCTURAR EL PROGRAMA)
+                df_filt['Factura (Fecha de factura)']=pd.to_datetime(df_filt['Factura (Fecha de factura)'], format= '%d.%m.%Y').dt.strftime('%d/%m/%Y') 
                 
                 #SIMS RADIOS
                 df_filt_Radios = func.Filtro_Mot(df_filt)
                 #Se usa esto para contar los radios y generar el texto del correo
                 df_filt_Radios.to_excel("ArchivoTemp.xlsx" ,sheet_name="SELL-THROUGH")
-                df_filt_Radios= df_filt_Radios.loc[:,['Factura (Cliente)','Producto' , 'Producto (Texto)' , 'Cantidad de factura']]
-                df_filt_Radios= df_filt_Radios.sort_values('Cantidad de factura' , ascending=False)
+                df_filt_Radios= df_filt_Radios.loc[:,['Factura (Fecha de factura)','Factura (Cliente)','Producto' , 'Producto (Texto)' , 'Cantidad de factura','Pedido de cliente (Promoción)']]
                 
                 #SIMS BATERIAS
                 df_filt_Baterias= func.Filtro_Baterias(df_filt)
-                df_filt_Baterias= df_filt_Baterias.loc[:,['Factura (Cliente)','Producto' , 'Producto (Texto)' , 'Cantidad de factura']]
-                df_filt_Baterias= df_filt_Baterias.sort_values('Cantidad de factura' , ascending=False)
+                df_filt_Baterias= df_filt_Baterias.loc[:,['Factura (Fecha de factura)','Factura (Cliente)','Producto' , 'Producto (Texto)' , 'Cantidad de factura','Pedido de cliente (Promoción)']]
                 
                 #SIMS A&E
                 df=pd.read_excel(filename , sheet_name="Hoja1" , header=1)
                 df= df[df['Factura (Año natural)']== int(ano)]
                 df= func.agregar_fecha(df , mes , "acumulado" ,0,0)
+
+                #Cambiar Formato de Fecha (IMPORTANTE PARA REESTRUCTURAR EL PROGRAMA)
+                df['Factura (Fecha de factura)']=pd.to_datetime(df['Factura (Fecha de factura)'], format= '%d.%m.%Y').dt.strftime('%d/%m/%Y') 
+                
                 df_filt_AyE = func.Filtro_AyE(df)
                 #Solo selecciona las columnas que necesito
-                df_filt_AyE= df_filt_AyE.loc[:,['Factura (Cliente)','Producto' , 'Producto (Texto)' , 'Cantidad de factura','Valor neto facturado']]
-                df_filt_AyE= df_filt_AyE.sort_values('Cantidad de factura' , ascending=False)
-
+                df_filt_AyE= df_filt_AyE.loc[:,['Factura (Fecha de factura)','Factura (Cliente)','Producto' , 'Producto (Texto)' , 'Cantidad de factura','Valor neto facturado','Pedido de cliente (Promoción)']]
+                
+                #GENERAR TODO EN UNA MISMA TABLA
+                ReporteSIMS= func.GenerarReporteSIMS(df_filt_Radios,df_filt_Baterias , df_filt_AyE,mes ,ano)
                 #Totales sumarizados
                 Total_Cant_Baterias= df_filt_Baterias['Cantidad de factura'].sum()
                 Total_Fact_AyE= df_filt_AyE['Valor neto facturado'].sum()
                 Total_Cant_AyE= df_filt_AyE['Cantidad de factura'].sum()
-                 
                 #Adicion de los totales a la tabla
                 totalGeneral ={ 'Factura (Cliente)':'' , 'Producto':'' , 'Producto (Texto)':'TOTAL' ,'Cantidad de factura': Total_Cant_AyE , 'Valor neto facturado': Total_Fact_AyE }
                 df_filt_AyE = df_filt_AyE.append(totalGeneral, ignore_index=True)               
@@ -760,7 +766,7 @@ class Informe_SIMS(Frame):
                 
                 #EXPORTAR REPORTE
                 os.remove('ArchivoTemp.xlsx') #Elimina el archivo el cual no es necesario
-                func.guardar_reporte(df_filt_Radios , df_filt_Baterias , df_filt_AyE , 3)
+                func.guardar_reporte( ReporteSIMS, None, None , 1)
     
     def  TextoCorreo(self):
         if self.pasar==1:
