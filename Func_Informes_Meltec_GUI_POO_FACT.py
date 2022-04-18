@@ -161,6 +161,7 @@ def agregar_Porcentajes(df_tabla, Q_number, fin_titulo):
     return df_tabla
 
 def Ventas_Motorola_Vertex(data , df_metas):
+    metaMotorola= 11000000000
     #FILTROS DEL INFORME
     data= data[data['Categoría de producto'].str.contains("MOTOROLA|VERTEX|PAQUETE BASICO TRBONET")]
     data= data[~data['Categoría de producto'].str.contains('VARIOS SOLUCIONES MOTOROLA')]
@@ -178,7 +179,7 @@ def Ventas_Motorola_Vertex(data , df_metas):
                     df_tabla2['META MOTOROLA ANUAL'].iloc[i] = df_metas["META 2022"].iloc[j]
      
     df_tabla2 = df_tabla2.sort_values('VENTA AÑO 2022 MOTOROLA',ascending=False)
-    total_general= {"ASESOR": "Total general" , "VENTA AÑO 2022 MOTOROLA" : df_tabla2["VENTA AÑO 2022 MOTOROLA"].sum() ,"META MOTOROLA ANUAL" :df_tabla2["META MOTOROLA ANUAL"].sum() }
+    total_general= {"ASESOR": "Total general" , "VENTA AÑO 2022 MOTOROLA" : df_tabla2["VENTA AÑO 2022 MOTOROLA"].sum() ,"META MOTOROLA ANUAL" : metaMotorola }
     df_tabla2= df_tabla2.append(total_general, ignore_index=True)
 
     #Ingresa el porcentaje cumplido

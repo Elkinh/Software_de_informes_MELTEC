@@ -4,8 +4,8 @@ from tkinter import filedialog
 import os
 
 Qs= { "1": ["Enero" , "Febrero" , "Marzo"] , "2": ["Abril" , "Mayo" , "Junio"] , "3": ["Julio", "Agosto" , "Septiembre"] , "4": ["Octubre" , "Noviembre" , "Diciembre"]}
-categorias= {"low_tier (XT 185 ,RVA 50,EP 350,VX 80,DEP 250, DTR 720 , VZ 30)": ["XT 185" ,"RVA 50","EP 350","VX 80","DEP 250", "DTR 720","VZ 30"] , 
-             "mid_tier (DEP 450,DEP 550E,DEP 570E,SL 500E,DEM 300,DEM 400,DEM 500)" : ["DEP 450","DEP 550E","DEP 570E","SL 500E","DEM 300","DEM 400","DEM 500"] ,
+categorias= {"low_tier (XT 185 ,RVA 50,EP 350,VX 80, DTR 720 , VZ 30)": ["XT 185" ,"RVA 50","EP 350","VX 80", "DTR 720","VZ 30"] , 
+             "mid_tier (DEP 250, DEP 450,DEP 550E,DEP 570E,SL 500E,DEM 300,DEM 400,DEM 500)" : ["DEP 250","DEP 450","DEP 550E","DEP 570E","SL 500E","DEM 300","DEM 400","DEM 500"] ,
              "high_tier (DGP 5050E,DGP 5550E,DGP 8050E,DGP 8550E,DGM 5000E,DGM 5500E,DGM 8000E,DGM 8500E,SL 8550E)": ["DGP 5050E","DGP 5550E","DGP 8050E","DGP 8550E","DGM 5000E","DGM 5500E","DGM 8000E","DGM 8500E","SL 8550E" ] ,
              "repetidoras (SLR 5100,SLR 1000)" : ["SLR 5100","SLR 1000"] ,
              "T_4X0 (T 400CO, T 470CO)": ["T 400CO", "T 470CO"] , 
@@ -348,7 +348,7 @@ def calcular_cantidades_Q(data):
     #print(list(data.columns.values))
     tabla["CATEGORIA"] = categorias.keys()
 
-    otrasRef= data[~data['Producto (Texto)'].isin(categorias["low_tier (XT 185 ,RVA 50,EP 350,VX 80,DEP 250, DTR 720 , VZ 30)"] + categorias["mid_tier (DEP 450,DEP 550E,DEP 570E,SL 500E,DEM 300,DEM 400,DEM 500)"] + categorias["high_tier (DGP 5050E,DGP 5550E,DGP 8050E,DGP 8550E,DGM 5000E,DGM 5500E,DGM 8000E,DGM 8500E,SL 8550E)"] + categorias["repetidoras (SLR 5100,SLR 1000)"] + categorias["T_4X0 (T 400CO, T 470CO)"])]
+    otrasRef= data[~data['Producto (Texto)'].isin(categorias["low_tier (XT 185 ,RVA 50,EP 350,VX 80, DTR 720 , VZ 30)"] + categorias["mid_tier (DEP 250, DEP 450,DEP 550E,DEP 570E,SL 500E,DEM 300,DEM 400,DEM 500)"] + categorias["high_tier (DGP 5050E,DGP 5550E,DGP 8050E,DGP 8550E,DGM 5000E,DGM 5500E,DGM 8000E,DGM 8500E,SL 8550E)"] + categorias["repetidoras (SLR 5100,SLR 1000)"] + categorias["T_4X0 (T 400CO, T 470CO)"])]
     for i in range(1,5):
         df_Q= data[data['Factura (Mes natural)'].isin(Qs[str(i)])]
         
@@ -362,7 +362,7 @@ def calcular_cantidades_Q(data):
                 indice= tabla.index[tabla["CATEGORIA"]== llave][0]
                 tabla["Q"+ str(i)].iloc[indice] = tabla["Q"+ str(i)].sum()
             else:
-                df_otros= df_Q[~df_Q['Producto (Texto)'].isin(categorias["low_tier (XT 185 ,RVA 50,EP 350,VX 80,DEP 250, DTR 720 , VZ 30)"] + categorias["mid_tier (DEP 450,DEP 550E,DEP 570E,SL 500E,DEM 300,DEM 400,DEM 500)"] + categorias["high_tier (DGP 5050E,DGP 5550E,DGP 8050E,DGP 8550E,DGM 5000E,DGM 5500E,DGM 8000E,DGM 8500E,SL 8550E)"] + categorias["repetidoras (SLR 5100,SLR 1000)"] + categorias["T_4X0 (T 400CO, T 470CO)"])]
+                df_otros= df_Q[~df_Q['Producto (Texto)'].isin(categorias["low_tier (XT 185 ,RVA 50,EP 350,VX 80, DTR 720 , VZ 30)"] + categorias["mid_tier (DEP 250, DEP 450,DEP 550E,DEP 570E,SL 500E,DEM 300,DEM 400,DEM 500)"] + categorias["high_tier (DGP 5050E,DGP 5550E,DGP 8050E,DGP 8550E,DGM 5000E,DGM 5500E,DGM 8000E,DGM 8500E,SL 8550E)"] + categorias["repetidoras (SLR 5100,SLR 1000)"] + categorias["T_4X0 (T 400CO, T 470CO)"])]
                 try:
                     otrasRef.append(df_otros)
                 except:
@@ -390,7 +390,7 @@ def calcular_cantidades_mes_a_mes(data):
                 indice= tabla.index[tabla["CATEGORIA"]== llave][0]
                 tabla[tabla.columns[mes]].iloc[indice] = tabla[tabla.columns[mes]].sum()
             else:
-                df= df_mes[~df_mes['Producto (Texto)'].isin(categorias["low_tier (XT 185 ,RVA 50,EP 350,VX 80,DEP 250, DTR 720 , VZ 30)"] + categorias["mid_tier (DEP 450,DEP 550E,DEP 570E,SL 500E,DEM 300,DEM 400,DEM 500)"] + categorias["high_tier (DGP 5050E,DGP 5550E,DGP 8050E,DGP 8550E,DGM 5000E,DGM 5500E,DGM 8000E,DGM 8500E,SL 8550E)"] + categorias["repetidoras (SLR 5100,SLR 1000)"] + categorias["T_4X0 (T 400CO, T 470CO)"])]
+                df= df_mes[~df_mes['Producto (Texto)'].isin(categorias["low_tier (XT 185 ,RVA 50,EP 350,VX 80, DTR 720 , VZ 30)"] + categorias["mid_tier (DEP 250, DEP 450,DEP 550E,DEP 570E,SL 500E,DEM 300,DEM 400,DEM 500)"] + categorias["high_tier (DGP 5050E,DGP 5550E,DGP 8050E,DGP 8550E,DGM 5000E,DGM 5500E,DGM 8000E,DGM 8500E,SL 8550E)"] + categorias["repetidoras (SLR 5100,SLR 1000)"] + categorias["T_4X0 (T 400CO, T 470CO)"])]
                 indice= tabla.index[tabla["CATEGORIA"]== llave][0]
                 tabla[tabla.columns[mes]].iloc[indice] = df['Cantidad de factura'].sum()
     return tabla
