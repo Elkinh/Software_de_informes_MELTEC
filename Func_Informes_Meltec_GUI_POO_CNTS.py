@@ -630,7 +630,7 @@ Quedo atento a tus comentarios, saludos.
 def Filtro_Onts_HUAWEI(df):
     #LIMPIEZA DE LOS DATOS
     df= df[df['Categoría de producto'].str.contains("ONTS HUAWEI")]
-    df= df[~df['Producto'].str.contains("EG8245W5-6T-50084187|EG8M8143A5G03-50084416")]
+    df= df[~df['Producto'].str.contains("EG8245W5-6T-50084187|EG8245W5-6T-50084676")]
     return  df
 
 def GenerarTablaCantsOnts(df_filt , diccionario , contador):
