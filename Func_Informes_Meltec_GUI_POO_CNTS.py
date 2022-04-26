@@ -2,6 +2,7 @@ import pandas as pd
 import re
 from tkinter import filedialog
 import os
+import numpy as np
 
 Qs= { "1": ["Enero" , "Febrero" , "Marzo"] , "2": ["Abril" , "Mayo" , "Junio"] , "3": ["Julio", "Agosto" , "Septiembre"] , "4": ["Octubre" , "Noviembre" , "Diciembre"]}
 categorias= {"low_tier (XT 185 ,RVA 50,EP 350,VX 80, DTR 720 , VZ 30)": ["XT 185" ,"RVA 50","EP 350","VX 80", "DTR 720","VZ 30"] , 
@@ -166,7 +167,8 @@ def Filtro_AyE(df):
 
 
 def AbreviacionMes(mes,ano):
-    mesENCURSO= mes[0:3].lower()
+    mesesIngles={'Enero' : 'jan' , 'Febrero' : 'feb' , 'Marzo':'mar' , 'Abril': 'apr' , 'Mayo' : 'may' ,'Junio': 'jun' , 'Julio': 'jul' , 'Agosto': 'aug' , 'Septiembre':'sept' , 'Octubre':'oct', 'Noviembre':'nov' , 'Diciembre':'dec' }
+    mesENCURSO= mesesIngles[mes]
     anoENCURSO= ano[2:]
     mesAB= mesENCURSO + '-' + anoENCURSO
     return mesAB
@@ -186,12 +188,30 @@ def GenerarReporteSIMS(radios,baterias, AyE, mes ,ano):
     TablaSIMS['QUANTITY']= TodaLaInfo['Cantidad de factura'].copy()
     TablaSIMS['Sales Price*']=TodaLaInfo['Valor neto facturado'].copy()
     TablaSIMS['PE or Promotion number (if applicable)*']=TodaLaInfo['Pedido de cliente (Promoción)']
+    TablaSIMS['RESELLER  ERP NUMBER'] = 0 #SITUACION INICIAL , POR DEFECTO CUANDO EL CLIENTE NO ESTÁ REGISTRADO EN EL SALES VIEW
+    TablaSIMS['RESELLER STATE']= 'Bogotá' #SITUACION INICIAL , POR DEFECTO CUANDO EL CLIENTE NO ESTÁ REGISTRADO EN EL SALES VIEW
+    #INSERTAR EL CODIGO SIMS
+    #CARGAR TABLA DE SIMS DADA POR MOTOROLA
+    tablaSALESVIEW= pd.read_excel("SALES VIEW - NOLA RESELLER COUNTRIES & STATES (COLOMBIA).xlsx" , header=3)
+    tablaSALESVIEW = tablaSALESVIEW.fillna(0)
+    tablaSeleccionada= tablaSALESVIEW[['PARTNER NAME', 'ERP NUMBER', 'RESELLER STATE']]
+    tablaSeleccionada['ERP NUMBER'] = tablaSeleccionada['ERP NUMBER'].astype(int)
+
+    for i in range(len(tablaSeleccionada)):
+        ind = list(np.where(TablaSIMS['RESELLER TRADING NAME*'].str.contains(tablaSeleccionada['PARTNER NAME'].iloc[i])))
+        indice= ind[0]
+        for j in indice:
+            TablaSIMS['RESELLER  ERP NUMBER'].iloc[j] = tablaSeleccionada['ERP NUMBER'].iloc[i]
+            TablaSIMS['RESELLER STATE'].iloc[j]= tablaSeleccionada['RESELLER STATE'].iloc[i]
 
     #VALORES ESTATICOS
     TablaSIMS['MONTH OF ACTIVITY']= AbreviacionMes(mes,ano)
     TablaSIMS['RESELLER COUNTRY']='Colombia'
     TablaSIMS['DISTRIBUTOR ERP NUMBER']='168442'
     TablaSIMS['DISTRIBUTOR NAME']='Meltec'
+    TablaSIMS['End Customer Name']='UNKNOWN'
+    TablaSIMS['End Customer Industry Vertical']='Unknown'
+
     
     #Reemplaza los valores de NaN por 0 o UNKNOWN
     TablaSIMS['QUANTITY'] = TablaSIMS['QUANTITY'].fillna(0)
