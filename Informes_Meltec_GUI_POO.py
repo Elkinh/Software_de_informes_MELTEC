@@ -297,6 +297,7 @@ class Informes_Diarios(Frame):
                 
                 #DIRECTORIO DE DESCARGA
                 os.remove('ArchivoTemp.xlsx') #Elimina el archivo el cual no es necesario
+                df_filt2= df_filt2.drop(['Factura','Factura (ANTIGUO ID Folio CO)','Factura (Folio ID CO)','Factura (Estado del ciclo de vida de la factura)','Factura (Mes natural)', 'Factura (Año natural)','Pedido de cliente (Promoción)',	'Pedido de cliente (Unidad de facturación)'	,'Pedido de cliente (Organización de ventas)'	,'Posición de pedido de cliente'	,'Posición de pedido de cliente (Unidad de ventas)'] , axis=1)
                 func.guardar_reporte(df_filt2 ,False , False , 1)
                 
             elif testigo ==2:
@@ -304,7 +305,8 @@ class Informes_Diarios(Frame):
                 df_filt= func.limpieza_datos(filename , ano)
                 df_filt= func.Filtro_CAMBIUM(df_filt)
                 df_filt= func.agregar_fecha(df_filt , mesTemp , 'diario' , diaTemp , 0)
-
+                df_filt['Valor Unitario'] = df_filt['Valor neto facturado'] / df_filt['Cantidad de factura']
+                df_filt= df_filt.drop(['Factura','Factura (ANTIGUO ID Folio CO)','Factura (Folio ID CO)','Factura (Estado del ciclo de vida de la factura)','Factura (Mes natural)', 'Factura (Año natural)','Pedido de cliente (Promoción)',	'Pedido de cliente (Unidad de facturación)'	,'Pedido de cliente (Organización de ventas)'	,'Posición de pedido de cliente'	,'Posición de pedido de cliente (Unidad de ventas)'] , axis=1)
                 #Redaccion del Correo
                 self.texto=func.textoCorreoCambium(diaTemp,0, mesTemp,0, ano,  len(df_filt.index))
 
@@ -420,6 +422,7 @@ class Informes_Semanales(Frame):
                 #se cambian las descripciones
                 df_filt2= func.cambiar_descripciones()
                 df_filt2= pd.DataFrame(df_filt2)
+                df_filt2= df_filt2.drop(['Factura','Factura (ANTIGUO ID Folio CO)','Factura (Folio ID CO)','Factura (Estado del ciclo de vida de la factura)','Factura (Mes natural)', 'Factura (Año natural)','Pedido de cliente (Promoción)',	'Pedido de cliente (Unidad de facturación)'	,'Pedido de cliente (Organización de ventas)'	,'Posición de pedido de cliente'	,'Posición de pedido de cliente (Unidad de ventas)'] , axis=1)
                 
                 #Redaccion del Correo
                 radios, t470co , xt185 , repetidoras , cantTotal =func.ContarCantidadesMotorola(df_filt2)
@@ -435,6 +438,9 @@ class Informes_Semanales(Frame):
                 df_filt= func.limpieza_datos(filename , ano)
                 df_filt= func.Filtro_CAMBIUM(df_filt)
                 df_filt= func.agregar_fecha(df_filt , rangoMes[0] , rangoMes[1] , rangoDias[0] , rangoDias[1])
+                df_filt['Valor Unitario'] = df_filt['Valor neto facturado'] / df_filt['Cantidad de factura']
+                df_filt= df_filt.drop(['Factura','Factura (ANTIGUO ID Folio CO)','Factura (Folio ID CO)','Factura (Estado del ciclo de vida de la factura)','Factura (Mes natural)', 'Factura (Año natural)','Pedido de cliente (Promoción)',	'Pedido de cliente (Unidad de facturación)'	,'Pedido de cliente (Organización de ventas)'	,'Posición de pedido de cliente'	,'Posición de pedido de cliente (Unidad de ventas)'] , axis=1)
+                #func.Dinamicas_Cants(df_filt, 'INALAMBRICAS')
                 #Redaccion del Correo
                 self.texto=func.textoCorreoCambium(rangoDias[0] , rangoDias[1] , rangoMes[0] , rangoMes[1] , ano,  len(df_filt.index))
 
@@ -493,6 +499,7 @@ class Informes_Acumulados(Frame):
                 df_filt = func.Filtro_Mot(df_filt)
                 df_filt= func.agregar_fecha(df_filt , mes , "acumulado" ,0,0)
                 #se genera archivo temporal
+                df_filt= df_filt.drop(['Factura','Factura (ANTIGUO ID Folio CO)','Factura (Folio ID CO)','Factura (Estado del ciclo de vida de la factura)','Factura (Mes natural)', 'Factura (Año natural)','Pedido de cliente (Promoción)',	'Pedido de cliente (Unidad de facturación)'	,'Pedido de cliente (Organización de ventas)'	,'Posición de pedido de cliente'	,'Posición de pedido de cliente (Unidad de ventas)'] , axis=1)
                 df_filt.to_excel("ArchivoTemp.xlsx" ,header= True , index = False, sheet_name="SELL-THROUGH" )
                 
                 #se cambian las descripciones
@@ -521,6 +528,9 @@ class Informes_Acumulados(Frame):
                 dia_final= func.calcular_dia_final(df_filt)
                 self.texto=func.textoCorreoCambium("01" , str(dia_final) , mes , mes , ano,  len(df_filt.index))
 
+                df_filt['Valor Unitario'] = df_filt['Valor neto facturado'] / df_filt['Cantidad de factura']
+                df_filt= df_filt.drop(['Factura','Factura (ANTIGUO ID Folio CO)','Factura (Folio ID CO)','Factura (Estado del ciclo de vida de la factura)','Factura (Mes natural)', 'Factura (Año natural)','Pedido de cliente (Promoción)',	'Pedido de cliente (Unidad de facturación)'	,'Pedido de cliente (Organización de ventas)'	,'Posición de pedido de cliente'	,'Posición de pedido de cliente (Unidad de ventas)'] , axis=1)
+                
                 #DIRECTORIO DE DESCARGA
                 func.guardar_reporte(df_filt , False ,False, 1)
 

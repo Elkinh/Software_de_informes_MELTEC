@@ -240,6 +240,18 @@ def cambiar_descripciones():
                 break
     return df_RP
 
+def Dinamicas_Cants(df, portafolio):
+
+    if portafolio == 'MOTOROLA':
+        df_cants= pd.pivot_table(df , index=['Empleado responsable', 'Factura (Cliente)'] , columns=['Producto (Texto)'] , values=['Cantidad de factura'], aggfunc=['sum'],  margins=True)
+        #df_cants.sort_values(by=('sum', 'Cantidad de factura' , 'All'), ascending=False,inplace=True)
+
+        df_cants.to_excel('tabla.xlsx')
+    elif portafolio == 'INALAMBRICAS':
+        df_cants= pd.pivot_table(df , index=['Empleado responsable', 'Factura (Cliente)' , 'Producto (Texto)' ] , values=['Cantidad de factura' ,'Valor neto facturado', 'Valor Unitario'] )
+        df_cants.to_excel('tabla.xlsx')
+
+
 def ContarCantidadesMotorola(df):
     radios=0
     t470co=0
