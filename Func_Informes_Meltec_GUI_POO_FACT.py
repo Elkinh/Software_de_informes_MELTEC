@@ -24,7 +24,7 @@ def Seleccion_Anio(filename, ano):
 
 def cargar_metas_y_comerciales_motorola():
     #LEER EXCEL
-    archivo_Excel= pd.read_excel('./Metas Motorola.xlsx' , sheet_name= "METAS" , header = 0)
+    archivo_Excel= pd.read_excel('./Documentos/Metas Motorola.xlsx' , sheet_name= "METAS" , header = 0)
     return archivo_Excel
 
 def seleccion_Q_actual(mes , Qs):

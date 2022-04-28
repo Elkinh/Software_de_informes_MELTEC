@@ -192,7 +192,7 @@ def GenerarReporteSIMS(radios,baterias, AyE, mes ,ano):
     TablaSIMS['RESELLER STATE']= 'Bogotá' #SITUACION INICIAL , POR DEFECTO CUANDO EL CLIENTE NO ESTÁ REGISTRADO EN EL SALES VIEW
     #INSERTAR EL CODIGO SIMS
     #CARGAR TABLA DE SIMS DADA POR MOTOROLA
-    tablaSALESVIEW= pd.read_excel("SALES VIEW - NOLA RESELLER COUNTRIES & STATES (COLOMBIA).xlsx" , header=3)
+    tablaSALESVIEW= pd.read_excel("./Documentos/SALES VIEW - NOLA RESELLER COUNTRIES & STATES (COLOMBIA).xlsx" , header=3)
     tablaSALESVIEW = tablaSALESVIEW.fillna(0)
     tablaSeleccionada= tablaSALESVIEW[['PARTNER NAME', 'ERP NUMBER', 'RESELLER STATE']]
     tablaSeleccionada['ERP NUMBER'] = tablaSeleccionada['ERP NUMBER'].astype(int)
@@ -226,7 +226,7 @@ def GenerarReporteSIMS(radios,baterias, AyE, mes ,ano):
 
 def cambiar_descripciones():
     #BASE DE DATOS REFERENCIAS DE RADIOS
-    dB= pd.read_excel('./DatabaseReferencias.xlsx' , sheet_name= "Database" , header = 0)
+    dB= pd.read_excel('./Documentos/DatabaseReferencias.xlsx' , sheet_name= "Database" , header = 0)
     #REPORTE FILTRADO
     df_RP= pd.read_excel("ArchivoTemp.xlsx" ,sheet_name="SELL-THROUGH")
     longitudDB= len(dB.index)
