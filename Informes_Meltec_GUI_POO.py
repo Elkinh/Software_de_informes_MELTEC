@@ -6,7 +6,7 @@ from tkinter import *
 from tkinter import filedialog
 from tkinter import messagebox
 from collections import defaultdict
-
+#otra modificacion
 Qs= { 1: ["Enero" , "Febrero" , "Marzo"] , 2: ["Abril" , "Mayo" , "Junio"] , 3: ["Julio", "Agosto" , "Septiembre"] , 4: ["Octubre" , "Noviembre" , "Diciembre"]}
 categoriasAIDC= ['HONEYWELL','ZEBRA','ULEFONE','BIXOLON','EQUIPOS EN ALQUILER','PROYECTOS MOVILIDAD','CINTAS CONSUMIBLES','CABLES CONSUMIBLES','ESTUCHES CONSUMIBLES','ETIQUETAS CONSUMIBLES','SOTI','IGS','SEWOO','LIMASOFT','PANASONIC','RUGGEAR','CATERPILAR','BEMATECH','CIPHERLAB','CYRUS','KYOCERA','NEWLAND','OPTICON','HYT','SONY','TODAS LAS CATEGORIAS']
     
