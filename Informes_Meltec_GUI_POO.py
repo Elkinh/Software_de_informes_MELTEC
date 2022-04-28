@@ -1,7 +1,6 @@
 import Func_Informes_Meltec_GUI_POO_CNTS as func
 import Func_Informes_Meltec_GUI_POO_FACT as fact
 import pandas as pd
-import numpy as np
 import os
 from tkinter import *
 from tkinter import filedialog
